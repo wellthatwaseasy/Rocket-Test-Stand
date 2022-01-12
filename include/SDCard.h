@@ -22,6 +22,8 @@
 
 extern void testWriteFile(fs::FS &fs, const char *path, uint8_t *buf, int len);
 extern void testReadFile(fs::FS &fs, const char *path, uint8_t *buf, int len);
+extern File OpenFile(fs::FS &fs,const char *path,const char* mode);
+extern void CloseFile(File file);
 extern void testIO(fs::FS &fs);
 extern void initSDCard();
 

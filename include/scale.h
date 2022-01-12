@@ -16,8 +16,7 @@
 // HX711 circuit wiring
 #define LOADCELL_DOUT_PIN 16
 #define LOADCELL_SCK_PIN 17
-#define UNITS_PER_READ 3
-
+#define UNITS_PER_READ 1
 #define LED_BUILTIN 2
 
 extern HX711 scale;

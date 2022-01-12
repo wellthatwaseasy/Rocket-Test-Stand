@@ -4,30 +4,58 @@
 
 void testWriteFile(fs::FS &fs, const char *path, uint8_t *buf, int len)
 {
-  if(SDEBUG) Serial.printf("Test writing %d bytes to %s\n", len, path);
-  unsigned long start_time = millis();
-
   File file = fs.open(path, "a");
   if (!file) {
-    if(SDEBUG) Serial.println("Failed to open file for writing");
+    Serial.println("Failed to open file for writing");
     return;
   }
-  unsigned long time_used = millis() - start_time;
-  if(SDEBUG) Serial.printf(" It took %lu ms to open the file\n", time_used);
-  start_time = millis();
-  int loop = TEST_FILE_SIZE;
-  while (loop--)
-  {
-    if (!file.write(buf, len)) {
-      if(SDEBUG) Serial.println("Write failed");
-      return;
-    }
+  if (!file.write(buf, len)) {
+    Serial.println("Write failed");
+    return;
   }
   file.flush();
-  time_used = millis() - start_time;
-  if(SDEBUG) Serial.printf(" Writing %dB, %d time(s) took %lums, each write averaged %fms @ %fKB/s\n", 
-                    len, TEST_FILE_SIZE , time_used, (float)time_used/(float)TEST_FILE_SIZE, (float)TEST_FILE_SIZE * len/(float)time_used);
   file.close();
+  if(0){
+    if(SDEBUG) Serial.printf("Test writing %d bytes to %s\n", len, path);
+    unsigned long start_time = millis();
+
+    File file = fs.open(path, "a");
+    if (!file) {
+      if(SDEBUG) Serial.println("Failed to open file for writing");
+      return;
+    }
+    unsigned long time_used = millis() - start_time;
+    if(SDEBUG) Serial.printf(" It took %lu ms to open the file\n", time_used);
+    start_time = millis();
+    int loop = TEST_FILE_SIZE;
+    while (loop--)
+    {
+      if (!file.write(buf, len)) {
+        if(SDEBUG) Serial.println("Write failed");
+        return;
+      }
+    }
+    file.flush();
+    time_used = millis() - start_time;
+    if(SDEBUG) Serial.printf(" Writing %dB, %d time(s) took %lums, each write averaged %fms @ %fKB/s\n", 
+                      len, TEST_FILE_SIZE , time_used, (float)time_used/(float)TEST_FILE_SIZE, (float)TEST_FILE_SIZE * len/(float)time_used);
+    file.close();
+  }
+}
+
+File OpenFile(fs::FS &fs, const char *path,const char* mode) {
+  File file = fs.open(path, mode);
+  if (!file) {
+    Serial.println("Failed to open file for writing");
+  } 
+  return file;
+}
+
+
+
+void CloseFile(File file){
+  file.flush();
+  file.close();  
 }
 
 void testReadFile(fs::FS &fs, const char *path, uint8_t *buf, int len)
